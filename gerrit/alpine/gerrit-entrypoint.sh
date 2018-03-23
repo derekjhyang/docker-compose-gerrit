@@ -2,13 +2,15 @@
 
 set -e
 
+export https_proxy=https://10.160.3.88:8080
+export http_proxy=http://10.160.3.88:8080
 
 set_gerrit_config() {
-  git config -f ${GERRIT_SITE}/etc/gerrit.config $@
+    git config -f ${GERRIT_SITE}/etc/gerrit.config "$@"
 }
 
 set_secure_config() {
-  git config -f ${GERRIT_SITE}/etc/secure.config $@
+    git config -f ${GERRIT_SITE}/etc/secure.config $@
 }
 
 
@@ -22,7 +24,7 @@ if [ "$1" = "/gerrit-start.sh" ]; then
   if [ -z "$(ls -A "$GERRIT_SITE")" ]; then
     echo "First time initialize gerrit..."
     java -jar "${GERRIT_WAR}" init --batch --no-auto-start -d "${GERRIT_SITE}" ${GERRIT_INIT_ARGS}
-    
+    #java -jar ${GERRIT_WAR} init --batch --show-stack-trace -d ${GERRIT_SITE} ${GERRIT_INIT_ARGS}
     
     #All git repositories must be removed when database is set as postgres or mysql
     #in order to be recreated at the secondary init below.
@@ -34,11 +36,6 @@ if [ "$1" = "/gerrit-start.sh" ]; then
   cp -f ${GERRIT_HOME}/delete-project.jar ${GERRIT_SITE}/plugins/delete-project.jar
   cp -f ${GERRIT_HOME}/events-log.jar ${GERRIT_SITE}/plugins/events-log.jar
 
-  # Install the Bouncy Castle
-  cp -f ${GERRIT_HOME}/bcprov-jdk15on-${BOUNCY_CASTLE_VERSION}.jar ${GERRIT_SITE}/lib/bcprov-jdk15on-${BOUNCY_CASTLE_VERSION}.jar
-  cp -f ${GERRIT_HOME}/bcpkix-jdk15on-${BOUNCY_CASTLE_VERSION}.jar ${GERRIT_SITE}/lib/bcpkix-jdk15on-${BOUNCY_CASTLE_VERSION}.jar
-  
-  
 
   # Provide a way to customise this image
   echo
@@ -176,7 +173,7 @@ if [ "$1" = "/gerrit-start.sh" ]; then
 
   echo "Upgrading gerrit..."
   echo "GERRIT_SITE=${GERRIT_SITE}"
-  java -jar ${GERRIT_WAR} init --batch --show-stack-trace -d ${GERRIT_SITE} ${GERRIT_INIT_ARGS}
+  java -jar ${GERRIT_WAR} init --batch --skip-all-downloads --skip-plugins --show-stack-trace -d ${GERRIT_SITE} ${GERRIT_INIT_ARGS}
   if [ $? -eq 0 ]; then
     echo "Reindexing..."
     java -jar ${GERRIT_WAR} reindex -d ${GERRIT_SITE}
