@@ -7,6 +7,9 @@ This project helps you build containerized code-review system gerrit stack rapid
 3. sudo docker ps # verify the results
 4. sudo docker logs --tail 300 gerrit # see the gerrit startup logs
 
+## Demo
+![](https://github.com/hswayne77/docker-gerrit/blob/master/demo-screnshot.png)
+
 ## Next
 1. copy configs from etc/ to /etc/gerrit/, refer to docker-compose.yml for more details
 
