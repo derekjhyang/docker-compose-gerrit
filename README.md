@@ -1,5 +1,5 @@
 # docker-gerrit
-This project helps you build containerized code-review system gerrit stack rabidly.
+This project helps you build containerized code-review system gerrit stack rapidly.
 
 ## How to Run
 1. sudo docker-compose build # build gerrit docker image
