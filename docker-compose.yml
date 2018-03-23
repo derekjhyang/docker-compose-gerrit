@@ -70,3 +70,54 @@ services:
         ports:
             - 443:443
             - 29418:29418
+    
+    influxdb_volume:
+        image: busybox
+        volumes: 
+            - /opt/influxdb/data:/data
+           
+    influxdb:
+        image: influxdb/influxdb
+        container_name: influxdb
+        restart: on-failure:2
+        ports:
+           - 8083:8083
+           - 8086:8086
+        expose:
+           - 8090
+           - 8099
+        depends_on:
+           - influxdb_volume
+        volumes_from:
+           - influxdb_volume
+
+    cadvisor:
+        image: google/cadvisor:latest
+        container_name: cadvisor
+        restart: always
+        command: -storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086
+        volumes:
+           - /:/rootfs:ro
+           - /var/run:/var/run:rw
+           - /sys:/sys:ro
+           - /var/lib/docker/:/var/lib/docker:ro
+        links:
+           - influxdb:influxdb
+        ports:
+           - 8080:8080
+
+    grafana:
+        image: grafana/grafana:2.6.0
+        restart: always
+        links:
+            - influxdb:influxdb
+        ports:
+            - "3000:3000"
+        environment:
+            - HTTP_USER=admin
+            - HTTP_PASS=admin
+            - INFLUXDB_HOST=influxdb
+            - INFLUXDB_PORT=8086
+            - INFLUXDB_NAME=cadvisor
+            - INFLUXDB_USER=root
+            - INFLUXDB_PASS=root 
