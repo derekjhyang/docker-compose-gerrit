@@ -1,0 +1,72 @@
+version: '2.1'
+services:
+    db:
+        image: mariadb:5.5
+        container_name: mysql
+        restart: on-failure:2
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/mysql:/etc/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_USER=gerrit
+            - MYSQL_PASSWORD=GERRIT_PASS
+            - MYSQL_DATABASE=reviewdb
+        env_file:
+            - /etc/mysql/mysql_docker.env
+        ports:
+            - 3306:3306
+    ldap:
+        image: dinkel/openldap:latest
+        container_name: openldap
+        restart: on-failure:2
+        volumes:
+            - /etc/ldap:/etc/ldap
+            - /var/lib/ldap:/var/lib/ldap
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        environment:
+            - SLAPD_PASSWORD=password
+            - SLAPD_CONFIG_PASSWORD=password
+        env_file:
+            - /etc/openldap/openldap_docker.env
+        ports:
+            - 389:389
+            - 636:636
+    ldap-admin:
+        image: osixia/phpldapadmin
+        container_name: ldap_phpldapadmin
+        ports:
+            - 6443:443
+        links:
+            - ldap:ldap
+        depends_on:
+            - ldap
+        environment:
+            - PHPLDAPADMIN_LDAP_HOSTS=ldap
+    gerrit:
+        build: ./gerrit/alpine
+        image: ecc/gerrit:latest
+        container_name: gerrit
+        restart: on-failure:2
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/gerrit:/var/gerrit/review_site
+            - /root/.ssh/:/root/.ssh/
+        environment:
+            - DATABASE_TYPE=mysql
+            - DATABASE_HOSTNAME=db
+            - DATABASE_DATABASE=reviewdb
+            - DATABASE_USERNAME=gerrit
+            - DATABASE_PASSWORD=GERRIT_PASS
+        external_links:
+            - db:mysql
+            - ldap:openldap
+        depends_on:
+            - db
+            - ldap
+        ports:
+            - 443:443
+            - 29418:29418
