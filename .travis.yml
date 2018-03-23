@@ -12,5 +12,5 @@ before_script:
     - docker ps
 
 script:
-    - while ! curl --retry 10 --retry-delay 5 -v https://0.0.0.0:443 >/dev/null; do sleep 1; done
+    - while ! nc -vz -w 5 0.0.0.0 443  >/dev/null; do sleep 1; done
     - while ! nc -vz -w 5 0.0.0.0 29418 >/dev/null; do sleep 1; done
