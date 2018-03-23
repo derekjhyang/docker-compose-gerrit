@@ -47,7 +47,7 @@ services:
             - PHPLDAPADMIN_LDAP_HOSTS=ldap
     gerrit:
         build: ./gerrit/alpine
-        image: ecc/gerrit:latest
+        image: gerrit:latest
         container_name: gerrit
         restart: on-failure:2
         volumes:
