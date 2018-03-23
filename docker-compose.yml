@@ -13,8 +13,8 @@ services:
             - MYSQL_USER=gerrit
             - MYSQL_PASSWORD=GERRIT_PASS
             - MYSQL_DATABASE=reviewdb
-        env_file:
-            - /etc/mysql/mysql_docker.env
+        #env_file:
+        #    - /etc/mysql/mysql_docker.env
         ports:
             - 3306:3306
     ldap:
@@ -29,8 +29,8 @@ services:
         environment:
             - SLAPD_PASSWORD=password
             - SLAPD_CONFIG_PASSWORD=password
-        env_file:
-            - /etc/openldap/openldap_docker.env
+        #env_file:
+        #    - /etc/openldap/openldap_docker.env
         ports:
             - 389:389
             - 636:636
