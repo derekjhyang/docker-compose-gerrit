@@ -1,10 +1,4 @@
 FROM ubuntu:16.04
-MAINTAINER jhyang@cht.com.tw
-
-ARG http_proxy=http://10.160.3.88:8080
-ARG https_proxy=https://10.160.3.88:8080
-ARG ftp_proxy=https://10.160.3.88:8080
-ARG no_proxy=localhost
 
 ENV GERRIT_HOME /var/gerrit
 ENV GERRIT_SITE ${GERRIT_HOME}/review_site
