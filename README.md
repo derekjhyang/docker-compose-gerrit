@@ -1,7 +1,7 @@
 # docker-compose-gerrit
 This project helps you build containerized code-review system gerrit stack rapidly.
 
-[![Build Status](https://travis-ci.org/hswayne77/docker-gerrit.svg?branch=master)](https://travis-ci.org/hswayne77/docker-gerrit)
+[![Build Status](https://travis-ci.org/hswayne77/docker-compose-gerrit.svg?branch=master)](https://travis-ci.org/hswayne77/docker-compose-gerrit)
 
 ## How to Run
 1. sudo docker-compose build # build gerrit docker image
