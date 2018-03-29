@@ -2,9 +2,6 @@
 
 set -e
 
-export https_proxy=https://10.160.3.88:8080
-export http_proxy=http://10.160.3.88:8080
-
 set_gerrit_config() {
     git config -f ${GERRIT_SITE}/etc/gerrit.config "$@"
 }
