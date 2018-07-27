@@ -1,10 +1,5 @@
 FROM openfrontier/gerrit:latest 
 
-MAINTAINER jhyang@cht.com.tw
-
-#ARG https_proxy=https://10.160.3.88:8080
-#ARG http_proxy=http://10.160.3.88:8080
-
 RUN set -x \
     && apk add --update --no-cache git openssh openssh-client openssl bash perl perl-cgi git-gitweb curl su-exec procmail vim wget grep python mariadb-client py-pip findutils tcpdump
 RUN apk upgrade
